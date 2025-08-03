@@ -38,6 +38,7 @@ export const metadata = {
     { media: "(prefers-color-scheme: light)", color: "#9333ea" },
     { media: "(prefers-color-scheme: dark)", color: "#9333ea" },
   ],
+    generator: 'v0.dev'
 }
 
 export default function RootLayout({ children }) {
