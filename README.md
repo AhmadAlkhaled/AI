@@ -1,4 +1,6 @@
-# Aegis web design
+# Aegis Web Design
+
+This project was generated using v0.
 
 *Automatically synced with your [v0.dev](https://v0.dev) deployments*
 

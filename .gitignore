@@ -2,26 +2,23 @@
 
 # dependencies
 /node_modules
+/.pnpm
+
+# testing
+/coverage
 
 # next.js
 /.next/
 /out/
+/export/
+/cache/
 
-# production
-/build
+# Editors and IDEs
+.dbshell
+*.js.map
 
-# debug
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-.pnpm-debug.log*
-
-# env files
-.env*
-
-# vercel
-.vercel
-
-# typescript
-*.tsbuildinfo
-next-env.d.ts
+# vscode
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+.DS_Store
