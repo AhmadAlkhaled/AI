@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -51,6 +52,7 @@ import Link from "next/link"
 export default function DashboardPage() {
   const [securityScore, setSecurityScore] = useState(87)
   const [isScanning, setIsScanning] = useState(false)
+  const router = useRouter()
   const [selectedDomain, setSelectedDomain] = useState("")
   const [filterStatus, setFilterStatus] = useState("all")
   const [searchTerm, setSearchTerm] = useState("")
@@ -190,28 +192,32 @@ export default function DashboardPage() {
 
       {/* Header */}
       <header className="relative z-10 border-b border-primary/20 backdrop-blur-xl bg-slate-950/80 sticky top-0">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <Link href="/" className="flex items-center space-x-2">
+        <div className="container mx-auto px-3 sm:px-4 py-3 sm:py-4">
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex items-center gap-3 min-w-0">
+              <Link href="/" className="flex items-center gap-2 shrink-0">
                 <div className="w-8 h-8 bg-gradient-to-r from-primary to-secondary rounded-lg flex items-center justify-center">
                   <Shield className="w-5 h-5 text-white" />
                 </div>
-                <span className="text-2xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+                <span className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
                   Aegis
                 </span>
               </Link>
-              <div className="text-gray-400">|</div>
-              <h1 className="text-xl font-semibold text-white">Security Dashboard</h1>
+              <div className="text-gray-400 hidden xs:block">{"|"}</div>
+              <h1 className="text-base sm:text-xl font-semibold text-white truncate">Security Dashboard</h1>
             </div>
 
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center gap-2 sm:gap-4">
               <div className="relative">
                 <Button
                   variant="ghost"
                   size="sm"
                   className="text-gray-300 hover:text-white relative"
-                  onClick={() => setNotifications(0)}
+                  onClick={() => {
+                    setNotifications(0)
+                    router.push("/notifications")
+                  }}
+                  aria-label="Benachrichtigungen öffnen"
                 >
                   <Bell className="w-4 h-4" />
                   {notifications > 0 && (
@@ -224,7 +230,12 @@ export default function DashboardPage() {
 
               <Dialog>
                 <DialogTrigger asChild>
-                  <Button variant="ghost" size="sm" className="text-gray-300 hover:text-white">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="text-gray-300 hover:text-white"
+                    aria-label="Einstellungen"
+                  >
                     <Settings className="w-4 h-4" />
                   </Button>
                 </DialogTrigger>
@@ -252,76 +263,79 @@ export default function DashboardPage() {
                 </DialogContent>
               </Dialog>
 
-              <div className="w-8 h-8 bg-gradient-to-r from-primary to-secondary rounded-full cursor-pointer"></div>
+              <div
+                className="w-8 h-8 bg-gradient-to-r from-primary to-secondary rounded-full cursor-pointer"
+                aria-hidden="true"
+              ></div>
             </div>
           </div>
         </div>
       </header>
 
-      <div className="relative z-10 container mx-auto px-4 py-8">
+      <div className="relative z-10 container mx-auto px-3 sm:px-4 py-6 sm:py-8">
         {/* Welcome Section with Real-time Stats */}
-        <div className="mb-8">
-          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-6">
+        <div className="mb-6 sm:mb-8">
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 sm:gap-4 mb-4 sm:mb-6">
             <div>
-              <h2 className="text-3xl font-bold text-white mb-2">Security Command Center</h2>
-              <p className="text-gray-400">Echtzeit-Überwachung Ihrer digitalen Assets</p>
+              <h2 className="text-2xl sm:text-3xl font-bold text-white mb-1 sm:mb-2">Security Command Center</h2>
+              <p className="text-gray-400 text-sm sm:text-base">Echtzeit-Überwachung Ihrer digitalen Assets</p>
             </div>
-            <div className="flex items-center space-x-4 mt-4 lg:mt-0">
-              <div className="flex items-center space-x-2">
+            <div className="flex items-center gap-3 sm:gap-4">
+              <div className="flex items-center gap-2">
                 <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
-                <span className="text-green-400 text-sm">System Online</span>
+                <span className="text-green-400 text-xs sm:text-sm">System Online</span>
               </div>
-              <Badge className="badge-primary">Uptime: {realTimeData.uptime}%</Badge>
+              <Badge className="badge-primary text-xs sm:text-sm">Uptime: {realTimeData.uptime}%</Badge>
             </div>
           </div>
 
           {/* Real-time Threat Monitor */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-3 sm:gap-4 mb-6 sm:mb-8">
             <Card className="glass-card card-hover border-red-500/20 bg-red-500/5">
-              <CardContent className="p-4">
+              <CardContent className="p-3 sm:p-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-red-400 text-sm font-medium">Aktive Bedrohungen</p>
-                    <p className="text-2xl font-bold text-white">{realTimeData.activeThreats}</p>
+                    <p className="text-red-400 text-xs sm:text-sm font-medium">Aktive Bedrohungen</p>
+                    <p className="text-2xl sm:text-2xl font-bold text-white">{realTimeData.activeThreats}</p>
                   </div>
-                  <AlertTriangle className="w-8 h-8 text-red-400" />
+                  <AlertTriangle className="w-7 h-7 sm:w-8 sm:h-8 text-red-400" />
                 </div>
               </CardContent>
             </Card>
 
             <Card className="glass-card card-hover border-green-500/20 bg-green-500/5">
-              <CardContent className="p-4">
+              <CardContent className="p-3 sm:p-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-green-400 text-sm font-medium">Blockierte Angriffe</p>
-                    <p className="text-2xl font-bold text-white">{realTimeData.blockedAttacks}</p>
+                    <p className="text-green-400 text-xs sm:text-sm font-medium">Blockierte Angriffe</p>
+                    <p className="text-2xl sm:text-2xl font-bold text-white">{realTimeData.blockedAttacks}</p>
                   </div>
-                  <Shield className="w-8 h-8 text-green-400" />
+                  <Shield className="w-7 h-7 sm:w-8 sm:h-8 text-green-400" />
                 </div>
               </CardContent>
             </Card>
 
             <Card className="glass-card card-hover border-blue-500/20 bg-blue-500/5">
-              <CardContent className="p-4">
+              <CardContent className="p-3 sm:p-4">
                 <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-blue-400 text-sm font-medium">System Load</p>
-                    <p className="text-2xl font-bold text-white">{Math.round(realTimeData.systemLoad)}%</p>
+                  <div className="min-w-0">
+                    <p className="text-blue-400 text-xs sm:text-sm font-medium">System Load</p>
+                    <p className="text-2xl sm:text-2xl font-bold text-white">{Math.round(realTimeData.systemLoad)}%</p>
                   </div>
-                  <Activity className="w-8 h-8 text-blue-400" />
+                  <Activity className="w-7 h-7 sm:w-8 sm:h-8 text-blue-400" />
                 </div>
                 <Progress value={realTimeData.systemLoad} className="mt-2" />
               </CardContent>
             </Card>
 
             <Card className="glass-card card-hover border-cyan-500/20 bg-cyan-500/5">
-              <CardContent className="p-4">
+              <CardContent className="p-3 sm:p-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-cyan-400 text-sm font-medium">Scans heute</p>
-                    <p className="text-2xl font-bold text-white">24</p>
+                    <p className="text-cyan-400 text-xs sm:text-sm font-medium">Scans heute</p>
+                    <p className="text-2xl sm:text-2xl font-bold text-white">24</p>
                   </div>
-                  <Eye className="w-8 h-8 text-cyan-400" />
+                  <Eye className="w-7 h-7 sm:w-8 sm:h-8 text-cyan-400" />
                 </div>
               </CardContent>
             </Card>
@@ -329,20 +343,20 @@ export default function DashboardPage() {
         </div>
 
         {/* Security Score & Quick Actions */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8">
           {/* Enhanced Security Score */}
           <Card className="glass-card card-hover border-primary/20 lg:col-span-2">
-            <CardHeader>
-              <div className="flex items-center justify-between">
-                <CardTitle className="text-white flex items-center">
-                  <Shield className="w-5 h-5 mr-2 text-cyan-400" />
-                  Security Score
+            <CardHeader className="pb-2 sm:pb-4">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                <CardTitle className="text-white flex items-center gap-2">
+                  <Shield className="w-5 h-5 text-cyan-400" />
+                  <span className="text-base sm:text-lg">Security Score</span>
                 </CardTitle>
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center gap-2">
                   <Button
                     size="sm"
                     variant="outline"
-                    className="border-blue-500/30 text-blue-400 bg-transparent"
+                    className="border-blue-500/30 text-blue-400 bg-transparent text-xs sm:text-sm"
                     onClick={() => setSecurityScore(Math.floor(Math.random() * 40) + 60)}
                   >
                     <RefreshCw className="w-4 h-4 mr-2" />
@@ -352,11 +366,11 @@ export default function DashboardPage() {
               </div>
             </CardHeader>
             <CardContent>
-              <div className="flex items-center justify-between mb-6">
-                <div className="text-5xl font-bold text-white">{securityScore}/100</div>
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 sm:mb-6 gap-2">
+                <div className="text-4xl sm:text-5xl font-bold text-white">{securityScore}/100</div>
                 <div className="text-right">
                   <Badge
-                    className={`text-lg px-4 py-2 ${
+                    className={`text-sm sm:text-lg px-3 sm:px-4 py-1.5 sm:py-2 ${
                       securityScore >= 80 ? "badge-success" : securityScore >= 60 ? "badge-warning" : "badge-danger"
                     }`}
                   >
@@ -365,30 +379,30 @@ export default function DashboardPage() {
                 </div>
               </div>
 
-              <Progress value={securityScore} className="mb-6 h-3" />
+              <Progress value={securityScore} className="mb-4 sm:mb-6 h-2 sm:h-3" />
 
-              <div className="grid grid-cols-3 gap-4 text-center">
+              <div className="grid grid-cols-3 gap-3 sm:gap-4 text-center">
                 <div>
-                  <p className="text-2xl font-bold text-green-400">12</p>
-                  <p className="text-gray-400 text-sm">Sichere Domains</p>
+                  <p className="text-xl sm:text-2xl font-bold text-green-400">12</p>
+                  <p className="text-gray-400 text-xs sm:text-sm">Sichere Domains</p>
                 </div>
                 <div>
-                  <p className="text-2xl font-bold text-yellow-400">3</p>
-                  <p className="text-gray-400 text-sm">Warnungen</p>
+                  <p className="text-xl sm:text-2xl font-bold text-yellow-400">3</p>
+                  <p className="text-gray-400 text-xs sm:text-sm">Warnungen</p>
                 </div>
                 <div>
-                  <p className="text-2xl font-bold text-red-400">1</p>
-                  <p className="text-gray-400 text-sm">Kritische Issues</p>
+                  <p className="text-xl sm:text-2xl font-bold text-red-400">1</p>
+                  <p className="text-gray-400 text-xs sm:text-sm">Kritische Issues</p>
                 </div>
               </div>
 
-              <div className="mt-6 p-4 bg-slate-800/30 rounded-lg">
-                <div className="flex items-center justify-between">
+              <div className="mt-4 sm:mt-6 p-3 sm:p-4 bg-slate-800/30 rounded-lg">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
                   <div>
-                    <p className="text-white font-medium">Nächste geplante Prüfung</p>
-                    <p className="text-gray-400 text-sm">Morgen um 02:00 Uhr</p>
+                    <p className="text-white font-medium text-sm sm:text-base">Nächste geplante Prüfung</p>
+                    <p className="text-gray-400 text-xs sm:text-sm">Morgen um 02:00 Uhr</p>
                   </div>
-                  <Button size="sm" className="btn-primary">
+                  <Button size="sm" className="btn-primary text-xs sm:text-sm">
                     <Calendar className="w-4 h-4 mr-2" />
                     Planen
                   </Button>
@@ -399,13 +413,13 @@ export default function DashboardPage() {
 
           {/* Quick Actions */}
           <Card className="glass-card card-hover border-primary/20">
-            <CardHeader>
-              <CardTitle className="text-white">Schnellaktionen</CardTitle>
+            <CardHeader className="pb-2 sm:pb-4">
+              <CardTitle className="text-white text-base sm:text-lg">Schnellaktionen</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="space-y-3 sm:space-y-4">
               <Dialog>
                 <DialogTrigger asChild>
-                  <Button className="w-full btn-primary hover:from-blue-700 hover:to-cyan-700">
+                  <Button className="w-full btn-primary hover:from-blue-700 hover:to-cyan-700 text-sm sm:text-base">
                     <Plus className="w-4 h-4 mr-2" />
                     Neuer Scan
                   </Button>
@@ -464,7 +478,7 @@ export default function DashboardPage() {
 
               <Button
                 variant="outline"
-                className="w-full border-blue-500/30 text-blue-400 hover:bg-blue-500/10 bg-transparent"
+                className="w-full border-blue-500/30 text-blue-400 hover:bg-blue-500/10 bg-transparent text-sm sm:text-base"
               >
                 <Download className="w-4 h-4 mr-2" />
                 Report generieren
@@ -472,7 +486,7 @@ export default function DashboardPage() {
 
               <Button
                 variant="outline"
-                className="w-full border-green-500/30 text-green-400 hover:bg-green-500/10 bg-transparent"
+                className="w-full border-green-500/30 text-green-400 hover:bg-green-500/10 bg-transparent text-sm sm:text-base"
               >
                 <FileText className="w-4 h-4 mr-2" />
                 Compliance Check
@@ -483,12 +497,12 @@ export default function DashboardPage() {
               <div className="space-y-2">
                 <p className="text-white font-medium text-sm">Letzte Aktivität</p>
                 <div className="space-y-2">
-                  <div className="flex items-center space-x-2 text-sm">
+                  <div className="flex items-center gap-2 text-xs sm:text-sm">
                     <CheckCircle className="w-4 h-4 text-green-400" />
                     <span className="text-gray-300">Scan abgeschlossen</span>
                     <span className="text-gray-500">vor 2h</span>
                   </div>
-                  <div className="flex items-center space-x-2 text-sm">
+                  <div className="flex items-center gap-2 text-xs sm:text-sm">
                     <AlertTriangle className="w-4 h-4 text-yellow-400" />
                     <span className="text-gray-300">Warnung erkannt</span>
                     <span className="text-gray-500">vor 4h</span>
@@ -500,110 +514,91 @@ export default function DashboardPage() {
         </div>
 
         {/* Enhanced Tabs with More Functionality */}
-        <Tabs defaultValue="overview" className="space-y-6">
-          <TabsList className="tabs-modern p-1">
-            <TabsTrigger value="overview" className="tab-active">
-              <BarChart3 className="w-4 h-4 mr-2" />
+        <Tabs defaultValue="overview" className="space-y-4 sm:space-y-6">
+          <TabsList
+            className="tabs-modern p-1 -mx-3 sm:mx-0 px-3 sm:px-1 overflow-x-auto whitespace-nowrap
+            [&::-webkit-scrollbar]:hidden [scrollbar-width:none]"
+            aria-label="Ansichten"
+          >
+            <TabsTrigger value="overview" className="tab-active text-sm sm:text-base px-3 sm:px-4">
+              <BarChart3 className="w-4 h-4 mr-2 shrink-0" />
               Übersicht
             </TabsTrigger>
-            <TabsTrigger value="vulnerabilities" className="tab-active">
-              <AlertTriangle className="w-4 h-4 mr-2" />
+            <TabsTrigger value="vulnerabilities" className="tab-active text-sm sm:text-base px-3 sm:px-4">
+              <AlertTriangle className="w-4 h-4 mr-2 shrink-0" />
               Schwachstellen
             </TabsTrigger>
-            <TabsTrigger value="monitoring" className="tab-active">
-              <Eye className="w-4 h-4 mr-2" />
+            <TabsTrigger value="monitoring" className="tab-active text-sm sm:text-base px-3 sm:px-4">
+              <Eye className="w-4 h-4 mr-2 shrink-0" />
               Live Monitoring
             </TabsTrigger>
-            <TabsTrigger value="domains" className="tab-active">
-              <Globe className="w-4 h-4 mr-2" />
+            <TabsTrigger value="domains" className="tab-active text-sm sm:text-base px-3 sm:px-4">
+              <Globe className="w-4 h-4 mr-2 shrink-0" />
               Domains
             </TabsTrigger>
-            <TabsTrigger value="reports" className="tab-active">
-              <FileText className="w-4 h-4 mr-2" />
+            <TabsTrigger value="reports" className="tab-active text-sm sm:text-base px-3 sm:px-4">
+              <FileText className="w-4 h-4 mr-2 shrink-0" />
               Reports
             </TabsTrigger>
           </TabsList>
 
           <TabsContent value="overview">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
               {/* Threat Landscape */}
               <Card className="glass-card card-hover border-primary/20">
-                <CardHeader>
-                  <CardTitle className="text-white flex items-center">
-                    <PieChart className="w-5 h-5 mr-2 text-cyan-400" />
+                <CardHeader className="pb-2 sm:pb-4">
+                  <CardTitle className="text-white flex items-center gap-2 text-base sm:text-lg">
+                    <PieChart className="w-5 h-5 text-cyan-400" />
                     Bedrohungslandschaft
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="space-y-4">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-2">
-                        <div className="w-4 h-4 bg-red-500 rounded"></div>
-                        <span className="text-white">Malware</span>
+                  <div className="space-y-3 sm:space-y-4">
+                    {[
+                      { color: "bg-red-500", label: "Malware", value: 23, text: "text-red-400" },
+                      { color: "bg-orange-500", label: "Phishing", value: 18, text: "text-orange-400" },
+                      { color: "bg-yellow-500", label: "DDoS", value: 15, text: "text-yellow-400" },
+                      { color: "bg-blue-500", label: "Sonstige", value: 44, text: "text-blue-400" },
+                    ].map((i) => (
+                      <div key={i.label} className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <div className={`w-4 h-4 ${i.color} rounded`}></div>
+                          <span className="text-white text-sm sm:text-base">{i.label}</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className={`${i.text} font-semibold text-sm sm:text-base`}>{i.value}%</span>
+                          <Progress value={i.value} className="w-16 sm:w-20" />
+                        </div>
                       </div>
-                      <div className="flex items-center space-x-2">
-                        <span className="text-red-400 font-semibold">23%</span>
-                        <Progress value={23} className="w-20" />
-                      </div>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-2">
-                        <div className="w-4 h-4 bg-orange-500 rounded"></div>
-                        <span className="text-white">Phishing</span>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <span className="text-orange-400 font-semibold">18%</span>
-                        <Progress value={18} className="w-20" />
-                      </div>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-2">
-                        <div className="w-4 h-4 bg-yellow-500 rounded"></div>
-                        <span className="text-white">DDoS</span>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <span className="text-yellow-400 font-semibold">15%</span>
-                        <Progress value={15} className="w-20" />
-                      </div>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-2">
-                        <div className="w-4 h-4 bg-blue-500 rounded"></div>
-                        <span className="text-white">Sonstige</span>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <span className="text-blue-400 font-semibold">44%</span>
-                        <Progress value={44} className="w-20" />
-                      </div>
-                    </div>
+                    ))}
                   </div>
                 </CardContent>
               </Card>
 
               {/* Security Trends */}
               <Card className="glass-card card-hover border-primary/20">
-                <CardHeader>
-                  <CardTitle className="text-white flex items-center">
-                    <LineChart className="w-5 h-5 mr-2 text-cyan-400" />
+                <CardHeader className="pb-2 sm:pb-4">
+                  <CardTitle className="text-white flex items-center gap-2 text-base sm:text-lg">
+                    <LineChart className="w-5 h-5 text-cyan-400" />
                     Sicherheitstrends (7 Tage)
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="h-48 bg-slate-800/30 rounded-lg flex items-center justify-center mb-4">
-                    <p className="text-gray-400">Interaktives Diagramm würde hier angezeigt</p>
+                  <div className="h-40 sm:h-48 bg-slate-800/30 rounded-lg flex items-center justify-center mb-3 sm:mb-4 px-2 text-center">
+                    <p className="text-gray-400 text-sm">Interaktives Diagramm würde hier angezeigt</p>
                   </div>
-                  <div className="grid grid-cols-3 gap-4 text-center">
+                  <div className="grid grid-cols-3 gap-3 sm:gap-4 text-center">
                     <div>
-                      <p className="text-green-400 font-bold">+12%</p>
-                      <p className="text-gray-400 text-sm">Sicherheit</p>
+                      <p className="text-green-400 font-bold text-sm sm:text-base">+12%</p>
+                      <p className="text-gray-400 text-xs sm:text-sm">Sicherheit</p>
                     </div>
                     <div>
-                      <p className="text-red-400 font-bold">-8%</p>
-                      <p className="text-gray-400 text-sm">Bedrohungen</p>
+                      <p className="text-red-400 font-bold text-sm sm:text-base">-8%</p>
+                      <p className="text-gray-400 text-xs sm:text-sm">Bedrohungen</p>
                     </div>
                     <div>
-                      <p className="text-blue-400 font-bold">+5%</p>
-                      <p className="text-gray-400 text-sm">Performance</p>
+                      <p className="text-blue-400 font-bold text-sm sm:text-base">+5%</p>
+                      <p className="text-gray-400 text-xs sm:text-sm">Performance</p>
                     </div>
                   </div>
                 </CardContent>
@@ -613,20 +608,20 @@ export default function DashboardPage() {
 
           <TabsContent value="vulnerabilities">
             <Card className="glass-card card-hover border-primary/20">
-              <CardHeader>
-                <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between space-y-4 lg:space-y-0">
+              <CardHeader className="pb-2 sm:pb-4">
+                <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 sm:gap-4">
                   <div>
-                    <CardTitle className="text-white">Schwachstellen-Management</CardTitle>
-                    <CardDescription className="text-gray-400">
+                    <CardTitle className="text-white text-base sm:text-lg">Schwachstellen-Management</CardTitle>
+                    <CardDescription className="text-gray-400 text-sm">
                       Verwalten und beheben Sie Sicherheitslücken in Ihren Systemen
                     </CardDescription>
                   </div>
-                  <div className="flex items-center space-x-4">
+                  <div className="flex flex-wrap items-center gap-2 sm:gap-3">
                     <div className="relative">
-                      <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                      <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
                       <Input
                         placeholder="Schwachstellen suchen..."
-                        className="pl-10 input-modern text-white w-64"
+                        className="pl-10 input-modern text-white w-56 sm:w-64"
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                       />
@@ -634,7 +629,7 @@ export default function DashboardPage() {
                     <Select value={filterStatus} onValueChange={setFilterStatus}>
                       <SelectTrigger className="w-40 input-modern text-white">
                         <Filter className="w-4 h-4 mr-2" />
-                        <SelectValue />
+                        <SelectValue placeholder="Alle Status" />
                       </SelectTrigger>
                       <SelectContent className="bg-slate-800 border-blue-500/30">
                         <SelectItem value="all">Alle Status</SelectItem>
@@ -652,13 +647,13 @@ export default function DashboardPage() {
                 </div>
               </CardHeader>
               <CardContent>
-                <div className="space-y-4">
+                <div className="space-y-3 sm:space-y-4">
                   {filteredVulnerabilities.map((vuln) => (
                     <Card key={vuln.id} className="glass-card card-hover border-l-4 border-l-red-500 bg-slate-800/30">
-                      <CardContent className="p-4">
-                        <div className="flex items-start justify-between">
-                          <div className="flex-1">
-                            <div className="flex items-center space-x-3 mb-2">
+                      <CardContent className="p-3 sm:p-4">
+                        <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-3">
+                          <div className="flex-1 min-w-0">
+                            <div className="flex flex-wrap items-center gap-2 mb-2">
                               <Badge
                                 className={`${
                                   vuln.severity === "Kritisch"
@@ -668,7 +663,7 @@ export default function DashboardPage() {
                                       : vuln.severity === "Mittel"
                                         ? "badge-warning"
                                         : "badge-primary"
-                                }`}
+                                } text-xs sm:text-sm`}
                               >
                                 {vuln.severity}
                               </Badge>
@@ -679,21 +674,21 @@ export default function DashboardPage() {
                                     : vuln.status === "In Bearbeitung"
                                       ? "badge-primary"
                                       : "bg-gray-500/20 text-gray-400"
-                                }`}
+                                } text-xs sm:text-sm`}
                               >
                                 {vuln.status}
                               </Badge>
-                              <span className="text-gray-400 text-sm">CVSS: {vuln.cvss}</span>
+                              <span className="text-gray-400 text-xs sm:text-sm">CVSS: {vuln.cvss}</span>
                             </div>
-                            <h3 className="text-white font-semibold mb-1">{vuln.title}</h3>
-                            <p className="text-gray-300 text-sm mb-2">{vuln.description}</p>
-                            <div className="flex items-center space-x-4 text-xs text-gray-400">
+                            <h3 className="text-white font-semibold mb-1 text-sm sm:text-base">{vuln.title}</h3>
+                            <p className="text-gray-300 text-xs sm:text-sm mb-2">{vuln.description}</p>
+                            <div className="flex flex-wrap items-center gap-3 text-xs text-gray-400">
                               <span>Domain: {vuln.domain}</span>
                               <span>Kategorie: {vuln.category}</span>
                               <span>Entdeckt: {vuln.discovered}</span>
                             </div>
                           </div>
-                          <div className="flex items-center space-x-2 ml-4">
+                          <div className="flex flex-wrap gap-2 md:ml-4">
                             <Button
                               size="sm"
                               variant="outline"
@@ -721,28 +716,31 @@ export default function DashboardPage() {
           </TabsContent>
 
           <TabsContent value="monitoring">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
               {/* System Status */}
               <Card className="glass-card card-hover border-primary/20">
-                <CardHeader>
-                  <CardTitle className="text-white flex items-center">
-                    <Activity className="w-5 h-5 mr-2 text-cyan-400" />
+                <CardHeader className="pb-2 sm:pb-4">
+                  <CardTitle className="text-white flex items-center gap-2 text-base sm:text-lg">
+                    <Activity className="w-5 h-5 text-cyan-400" />
                     System Status
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-4">
+                <CardContent className="space-y-3 sm:space-y-4">
                   {[
                     { name: "Web Server", status: "online", load: 34, icon: Server },
                     { name: "Database", status: "online", load: 67, icon: Database },
                     { name: "API Gateway", status: "warning", load: 89, icon: Wifi },
                     { name: "Load Balancer", status: "online", load: 23, icon: Activity },
                   ].map((service, index) => (
-                    <div key={index} className="flex items-center justify-between p-3 rounded-lg bg-slate-800/30">
-                      <div className="flex items-center space-x-3">
+                    <div
+                      key={index}
+                      className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-3 rounded-lg bg-slate-800/30 gap-2"
+                    >
+                      <div className="flex items-center gap-3">
                         <service.icon className="w-5 h-5 text-blue-400" />
                         <div>
-                          <p className="text-white font-medium">{service.name}</p>
-                          <div className="flex items-center space-x-2">
+                          <p className="text-white font-medium text-sm sm:text-base">{service.name}</p>
+                          <div className="flex items-center gap-2">
                             <div
                               className={`w-2 h-2 rounded-full ${
                                 service.status === "online"
@@ -751,7 +749,7 @@ export default function DashboardPage() {
                               }`}
                             ></div>
                             <span
-                              className={`text-sm ${
+                              className={`text-xs sm:text-sm ${
                                 service.status === "online" ? "text-green-400" : "text-yellow-400"
                               }`}
                             >
@@ -760,9 +758,9 @@ export default function DashboardPage() {
                           </div>
                         </div>
                       </div>
-                      <div className="text-right">
-                        <p className="text-white font-medium">{service.load}% Load</p>
-                        <Progress value={service.load} className="w-20" />
+                      <div className="text-left sm:text-right">
+                        <p className="text-white font-medium text-sm sm:text-base">{service.load}% Load</p>
+                        <Progress value={service.load} className="w-24 sm:w-32" />
                       </div>
                     </div>
                   ))}
@@ -771,13 +769,13 @@ export default function DashboardPage() {
 
               {/* Live Alerts */}
               <Card className="glass-card card-hover border-primary/20">
-                <CardHeader>
-                  <CardTitle className="text-white flex items-center">
-                    <Bell className="w-5 h-5 mr-2 text-cyan-400" />
+                <CardHeader className="pb-2 sm:pb-4">
+                  <CardTitle className="text-white flex items-center gap-2 text-base sm:text-lg">
+                    <Bell className="w-5 h-5 text-cyan-400" />
                     Live Alerts
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-4">
+                <CardContent className="space-y-3 sm:space-y-4">
                   {[
                     {
                       type: "critical",
@@ -811,7 +809,7 @@ export default function DashboardPage() {
                             : "border-l-blue-500 bg-blue-500/10"
                       }`}
                     >
-                      <div className="flex items-start space-x-3">
+                      <div className="flex items-start gap-3">
                         <alert.icon
                           className={`w-5 h-5 mt-0.5 ${
                             alert.type === "critical"
@@ -821,9 +819,9 @@ export default function DashboardPage() {
                                 : "text-blue-400"
                           }`}
                         />
-                        <div className="flex-1">
-                          <p className="text-white font-medium">{alert.title}</p>
-                          <p className="text-gray-300 text-sm">{alert.description}</p>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-white font-medium text-sm sm:text-base">{alert.title}</p>
+                          <p className="text-gray-300 text-xs sm:text-sm">{alert.description}</p>
                           <p className="text-gray-400 text-xs mt-1">{alert.time}</p>
                         </div>
                         <Button size="sm" variant="ghost" className="text-gray-400 hover:text-white">
@@ -839,16 +837,16 @@ export default function DashboardPage() {
 
           <TabsContent value="domains">
             <Card className="glass-card card-hover border-primary/20">
-              <CardHeader className="flex flex-row items-center justify-between">
+              <CardHeader className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                 <div>
-                  <CardTitle className="text-white">Domain-Management</CardTitle>
-                  <CardDescription className="text-gray-400">
+                  <CardTitle className="text-white text-base sm:text-lg">Domain-Management</CardTitle>
+                  <CardDescription className="text-gray-400 text-sm">
                     Überwachen und verwalten Sie alle Ihre Domains an einem Ort
                   </CardDescription>
                 </div>
                 <Dialog>
                   <DialogTrigger asChild>
-                    <Button className="btn-primary hover:from-blue-700 hover:to-cyan-700">
+                    <Button className="btn-primary hover:from-blue-700 hover:to-cyan-700 text-sm sm:text-base">
                       <Plus className="w-4 h-4 mr-2" />
                       Domain hinzufügen
                     </Button>
@@ -884,59 +882,61 @@ export default function DashboardPage() {
                 </Dialog>
               </CardHeader>
               <CardContent>
-                <div className="space-y-4">
+                <div className="space-y-3 sm:space-y-4">
                   {domains.map((domain, index) => (
                     <Card key={index} className="glass-card card-hover border-blue-500/10 bg-slate-800/20">
-                      <CardContent className="p-4">
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center space-x-4">
-                            <div className="flex items-center space-x-2">
-                              <Globe className="w-5 h-5 text-blue-400" />
-                              <div>
-                                <p className="text-white font-medium">{domain.name}</p>
-                                <p className="text-gray-400 text-sm">Letzter Scan: {domain.lastScan}</p>
-                              </div>
+                      <CardContent className="p-3 sm:p-4">
+                        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+                          {/* Left: Domain + Last Scan */}
+                          <div className="flex items-start sm:items-center gap-3 min-w-0">
+                            <Globe className="w-5 h-5 text-blue-400 shrink-0 mt-0.5 sm:mt-0" />
+                            <div className="min-w-0">
+                              <p className="text-white font-medium text-sm sm:text-base truncate">{domain.name}</p>
+                              <p className="text-gray-400 text-xs sm:text-sm">Letzter Scan: {domain.lastScan}</p>
                             </div>
                           </div>
 
-                          <div className="flex items-center space-x-6">
-                            <div className="text-center">
-                              <p className="text-white font-medium">Score</p>
-                              <p
-                                className={`text-lg font-bold ${
-                                  domain.score >= 80
-                                    ? "text-green-400"
-                                    : domain.score >= 60
-                                      ? "text-yellow-400"
-                                      : "text-red-400"
-                                }`}
-                              >
-                                {domain.score}
-                              </p>
-                            </div>
+                          {/* Right: Metrics + Actions */}
+                          <div className="flex flex-col md:flex-row md:items-center gap-3 md:gap-6 w-full md:w-auto">
+                            <div className="grid grid-cols-3 gap-3 md:gap-6 w-full md:w-auto">
+                              <div className="text-center">
+                                <p className="text-white font-medium text-xs sm:text-sm">Score</p>
+                                <p
+                                  className={`text-base sm:text-lg font-bold ${
+                                    domain.score >= 80
+                                      ? "text-green-400"
+                                      : domain.score >= 60
+                                        ? "text-yellow-400"
+                                        : "text-red-400"
+                                  }`}
+                                >
+                                  {domain.score}
+                                </p>
+                              </div>
 
-                            <div className="text-center">
-                              <p className="text-white font-medium">SSL</p>
-                              {domain.ssl ? (
-                                <Lock className="w-5 h-5 text-green-400 mx-auto" />
-                              ) : (
-                                <Unlock className="w-5 h-5 text-red-400 mx-auto" />
-                              )}
-                            </div>
+                              <div className="text-center">
+                                <p className="text-white font-medium text-xs sm:text-sm">SSL</p>
+                                {domain.ssl ? (
+                                  <Lock className="w-5 h-5 text-green-400 mx-auto" />
+                                ) : (
+                                  <Unlock className="w-5 h-5 text-red-400 mx-auto" />
+                                )}
+                              </div>
 
-                            <div className="text-center">
-                              <p className="text-white font-medium">Bedrohungen</p>
-                              <p
-                                className={`text-lg font-bold ${
-                                  domain.threats === 0
-                                    ? "text-green-400"
-                                    : domain.threats <= 5
-                                      ? "text-yellow-400"
-                                      : "text-red-400"
-                                }`}
-                              >
-                                {domain.threats}
-                              </p>
+                              <div className="text-center">
+                                <p className="text-white font-medium text-xs sm:text-sm">Bedrohungen</p>
+                                <p
+                                  className={`text-base sm:text-lg font-bold ${
+                                    domain.threats === 0
+                                      ? "text-green-400"
+                                      : domain.threats <= 5
+                                        ? "text-yellow-400"
+                                        : "text-red-400"
+                                  }`}
+                                >
+                                  {domain.threats}
+                                </p>
+                              </div>
                             </div>
 
                             <Badge
@@ -946,20 +946,24 @@ export default function DashboardPage() {
                                   : domain.status === "Warnung"
                                     ? "badge-warning"
                                     : "badge-danger"
-                              }`}
+                              } self-start md:self-auto`}
                             >
                               {domain.status}
                             </Badge>
 
-                            <div className="flex items-center space-x-2">
-                              <Button size="sm" className="btn-primary" onClick={() => handleStartScan(domain.name)}>
+                            <div className="flex items-center gap-2 md:gap-3 w-full md:w-auto">
+                              <Button
+                                size="sm"
+                                className="btn-primary w-full md:w-auto text-sm"
+                                onClick={() => handleStartScan(domain.name)}
+                              >
                                 <Play className="w-4 h-4 mr-2" />
                                 Scan
                               </Button>
                               <Button
                                 size="sm"
                                 variant="outline"
-                                className="border-blue-500/30 text-blue-400 bg-transparent"
+                                className="border-blue-500/30 text-blue-400 bg-transparent w-full md:w-auto text-sm"
                               >
                                 <Settings className="w-4 h-4" />
                               </Button>
@@ -975,16 +979,16 @@ export default function DashboardPage() {
           </TabsContent>
 
           <TabsContent value="reports">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
               {/* Report Generation */}
               <Card className="glass-card card-hover border-primary/20">
-                <CardHeader>
-                  <CardTitle className="text-white">Report Generator</CardTitle>
-                  <CardDescription className="text-gray-400">
+                <CardHeader className="pb-2 sm:pb-4">
+                  <CardTitle className="text-white text-base sm:text-lg">Report Generator</CardTitle>
+                  <CardDescription className="text-gray-400 text-sm">
                     Erstellen Sie benutzerdefinierte Sicherheitsberichte
                   </CardDescription>
                 </CardHeader>
-                <CardContent className="space-y-6">
+                <CardContent className="space-y-4 sm:space-y-6">
                   <div>
                     <Label htmlFor="reportType">Report-Typ</Label>
                     <Select>
@@ -1015,12 +1019,12 @@ export default function DashboardPage() {
                     </Select>
                   </div>
 
-                  <div className="flex items-center space-x-2">
+                  <div className="flex items-center gap-2">
                     <Switch id="includeCharts" />
                     <Label htmlFor="includeCharts">Diagramme einschließen</Label>
                   </div>
 
-                  <div className="flex items-center space-x-2">
+                  <div className="flex items-center gap-2">
                     <Switch id="includeRecommendations" defaultChecked />
                     <Label htmlFor="includeRecommendations">Empfehlungen einschließen</Label>
                   </div>
@@ -1034,14 +1038,14 @@ export default function DashboardPage() {
 
               {/* Available Reports */}
               <Card className="glass-card card-hover border-primary/20">
-                <CardHeader>
-                  <CardTitle className="text-white">Verfügbare Reports</CardTitle>
-                  <CardDescription className="text-gray-400">
+                <CardHeader className="pb-2 sm:pb-4">
+                  <CardTitle className="text-white text-base sm:text-lg">Verfügbare Reports</CardTitle>
+                  <CardDescription className="text-gray-400 text-sm">
                     Laden Sie bereits generierte Berichte herunter
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="space-y-4">
+                  <div className="space-y-3 sm:space-y-4">
                     {[
                       {
                         name: "Wöchentlicher Sicherheitsbericht",
@@ -1072,17 +1076,20 @@ export default function DashboardPage() {
                         status: "Fertig",
                       },
                     ].map((report, index) => (
-                      <div key={index} className="flex items-center justify-between p-3 rounded-lg bg-slate-800/30">
-                        <div className="flex items-center space-x-3">
-                          <FileText className="w-5 h-5 text-blue-400" />
-                          <div>
-                            <p className="text-white font-medium">{report.name}</p>
-                            <p className="text-gray-400 text-sm">
+                      <div
+                        key={index}
+                        className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-3 rounded-lg bg-slate-800/30 gap-2"
+                      >
+                        <div className="flex items-center gap-3 min-w-0">
+                          <FileText className="w-5 h-5 text-blue-400 shrink-0" />
+                          <div className="min-w-0">
+                            <p className="text-white font-medium text-sm sm:text-base truncate">{report.name}</p>
+                            <p className="text-gray-400 text-xs sm:text-sm">
                               {report.date} • {report.type} • {report.size}
                             </p>
                           </div>
                         </div>
-                        <div className="flex items-center space-x-2">
+                        <div className="flex items-center gap-2">
                           <Badge className={`${report.status === "Fertig" ? "badge-success" : "badge-warning"}`}>
                             {report.status}
                           </Badge>

@@ -1,0 +1,74 @@
+.card {
+  background: rgba(30, 41, 59, 0.7);
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  overflow: hidden;
+
+  &:hover {
+    border-color: var(--secondary);
+    transform: translateY(-2px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  }
+
+  .header {
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--border-light);
+
+    .title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .description {
+      color: var(--text-secondary);
+      font-size: 0.875rem;
+    }
+  }
+
+  .content {
+    padding: 1.5rem;
+  }
+
+  .footer {
+    padding: 1rem 1.5rem;
+    border-top: 1px solid var(--border-light);
+    background: rgba(15, 23, 42, 0.5);
+  }
+
+  &.hover {
+    cursor: pointer;
+    
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
+    }
+  }
+
+  &.primary {
+    border-color: var(--primary);
+    
+    &:hover {
+      border-color: var(--secondary);
+      box-shadow: 0 20px 40px rgba(59, 130, 246, 0.2);
+    }
+  }
+
+  &.success {
+    border-color: var(--success);
+    background: rgba(16, 185, 129, 0.05);
+  }
+
+  &.warning {
+    border-color: var(--warning);
+    background: rgba(245, 158, 11, 0.05);
+  }
+
+  &.danger {
+    border-color: var(--danger);
+    background: rgba(239, 68, 68, 0.05);
+  }
+}

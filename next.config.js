@@ -1,7 +1,12 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  reactStrictMode: true,
+  swcMinify: true,
+  sassOptions: {
+    includePaths: ["./styles"],
+  },
   experimental: {
-    appDir: true,
+    appDir: false, // Using pages directory
   },
   eslint: {
     ignoreDuringBuilds: true,
@@ -10,7 +15,6 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
   images: {
-    domains: ["images.unsplash.com"],
     unoptimized: true,
   },
 }
