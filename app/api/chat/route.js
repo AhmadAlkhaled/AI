@@ -1,62 +1,29 @@
-import { NextResponse } from "next/server"
-
-const FAQ_ANSWERS = [
-  {
-    match: /bietet|angebot|features|funktion/i,
-    reply:
-      "Aegis bietet Erkennung von Bedrohungen, Dark‑Web‑Monitoring, Schwachstellen‑Scans, Compliance‑Reports und Echtzeit‑Dashboards – alles aus einer Plattform.",
-  },
-  {
-    match: /dark(-| )?web/i,
-    reply:
-      "Unsere Dark‑Web‑Überwachung durchsucht Leaks, Foren und Marktplätze nach Firmenbezug (Domains, E‑Mails, Assets) und alarmiert bei Treffern.",
-  },
-  {
-    match: /demo|testen|probe/i,
-    reply:
-      "Gerne! Wir richten eine interaktive Demo für Sie ein. Schreiben Sie uns Ihre gewünschte Domain und einen Kontakt.",
-  },
-  {
-    match: /integration|integrationen|siem|soar|api/i,
-    reply:
-      "Aegis integriert sich u.a. in SIEM/SOAR, Slack/Teams, E‑Mail‑Gateways und Cloud‑Provider. Auf Wunsch gibt es eine REST API und Webhooks.",
-  },
-  {
-    match: /sicher|sicherheit|daten|privacy|gdpr|dsgvo/i,
-    reply:
-      "Ihre Daten werden verschlüsselt übertragen und gespeichert. Rollen‑ und Rechtemanagement, Audit‑Logs und DSGVO‑Konformität sind Standard.",
-  },
-  {
-    match: /start|loslegen|preise|pricing/i,
-    reply:
-      "So starten Sie: 1) Kostenloses Assessment, 2) PoC, 3) Rollout. Preise richten sich nach Umfang/Assets – wir erstellen ein Angebot.",
-  },
-]
-
-export async function POST(req) {
+export async function POST(request) {
   try {
-    const { message } = await req.json()
-    const text = String(message ?? "").trim()
+    const { message } = await request.json()
+    const text = String(message || "").toLowerCase()
 
-    if (!text) {
-      return NextResponse.json({ reply: "Wie kann ich helfen? Stellen Sie gern eine Frage." })
+    let reply =
+      "Danke für Ihre Nachricht! Ich bin Ihr Aegis-Assistent. Fragen Sie mich zu Erkennung, Monitoring, Integrationen oder Onboarding."
+
+    if (text.includes("aegis")) {
+      reply = "Aegis ist eine KI-gestützte Sicherheitsplattform mit Echtzeit-Erkennung, Response und Reports."
+    } else if (text.includes("monitor") || text.includes("24/7")) {
+      reply = "Ja, wir unterstützen 24/7 Monitoring inkl. Benachrichtigungen und Eskalationen."
+    } else if (text.includes("integration") || text.includes("siem")) {
+      reply = "Wir integrieren u. a. SIEM/SOAR, Cloud Provider, EDR/XDR und Ticketing-Systeme."
+    } else if (text.includes("poc") || text.includes("test")) {
+      reply = "Für einen PoC: Wir setzen Ziele fest, definieren Datenquellen, aktivieren Szenarien und messen KPIs."
     }
 
-    for (const item of FAQ_ANSWERS) {
-      if (item.match.test(text)) {
-        return NextResponse.json({ reply: item.reply })
-      }
-    }
-
-    // Fallback
-    return NextResponse.json({
-      reply:
-        "Danke! Ich leite Ihre Frage weiter. In der Zwischenzeit: Aegis deckt Threat Detection, Dark‑Web‑Monitoring, Schwachstellen‑Scans und Compliance‑Reports ab.",
+    return new Response(JSON.stringify({ reply }), {
+      status: 200,
+      headers: { "Content-Type": "application/json" },
     })
-  } catch (e) {
-    return NextResponse.json(
-      { reply: "Entschuldigung, ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut." },
-      { status: 200 },
-    )
+  } catch {
+    return new Response(JSON.stringify({ reply: "Unerwarteter Fehler. Bitte später erneut versuchen." }), {
+      status: 200,
+      headers: { "Content-Type": "application/json" },
+    })
   }
 }

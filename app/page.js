@@ -152,6 +152,78 @@ export default function HomePage() {
       rating: 5,
       avatar: "/placeholder.svg?height=64&width=64",
     },
+    {
+      name: "M. Schulz",
+      role: "CISO, FinServe AG",
+      text: "Aegis hat unsere Mean-Time-to-Detect um 68% gesenkt.",
+      avatar: "/placeholder.svg?height=80&width=80",
+    },
+    {
+      name: "L. Weber",
+      role: "IT-Leiter, AutoTech",
+      text: "Nahtlose Integration ins bestehende SIEM. Top!",
+      avatar: "/placeholder.svg?height=80&width=80",
+    },
+    {
+      name: "T. Hartmann",
+      role: "SOC Lead, RetailCo",
+      text: "Alarme sind präziser, weniger False Positives.",
+      avatar: "/placeholder.svg?height=80&width=80",
+    },
+    {
+      name: "A. Hoffmann",
+      role: "CTO, HealthSoft",
+      text: "Transparente Reports überzeugen auch Auditoren.",
+      avatar: "/placeholder.svg?height=80&width=80",
+    },
+    {
+      name: "S. Kaiser",
+      role: "CIO, LogiChain",
+      text: "24/7 Monitoring und klare Eskalationspfade.",
+      avatar: "/placeholder.svg?height=80&width=80",
+    },
+    {
+      name: "R. Meier",
+      role: "Founder, SaaSCloud",
+      text: "PoC in 2 Wochen – klar messbare Ergebnisse.",
+      avatar: "/placeholder.svg?height=80&width=80",
+    },
+    {
+      name: "J. Krüger",
+      role: "Head of IT, IndustrieX",
+      text: "Zero-Trust-Ansatz gut unterstützt.",
+      avatar: "/placeholder.svg?height=80&width=80",
+    },
+    {
+      name: "V. Klein",
+      role: "Security Arch., BuildCo",
+      text: "Sehr flexible Richtlinien-Engine.",
+      avatar: "/placeholder.svg?height=80&width=80",
+    },
+    {
+      name: "F. Wagner",
+      role: "Ops Lead, MediaHub",
+      text: "Dashboards sind wirklich hilfreich.",
+      avatar: "/placeholder.svg?height=80&width=80",
+    },
+    {
+      name: "K. Neumann",
+      role: "CISO, BankPlus",
+      text: "Audits laufen schneller mit Aegis.",
+      avatar: "/placeholder.svg?height=80&width=80",
+    },
+    {
+      name: "N. Brandt",
+      role: "SecOps, PharmaOne",
+      text: "Automatisierte Response spart viel Zeit.",
+      avatar: "/placeholder.svg?height=80&width=80",
+    },
+    {
+      name: "P. Vogel",
+      role: "VP Eng., AdServe",
+      text: "Empfehlung für wachsende SaaS-Teams.",
+      avatar: "/placeholder.svg?height=80&width=80",
+    },
   ]
 
   const stats = [
@@ -161,7 +233,6 @@ export default function HomePage() {
     { number: "24/7", label: "Support" },
   ]
 
-  // Neue Inhalte
   const useCases = [
     {
       key: "web",

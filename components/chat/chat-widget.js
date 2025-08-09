@@ -1,36 +1,48 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
-import { MessageCircle, X, Send } from "lucide-react"
+import { MessageSquare, Send, X, Sparkles } from "lucide-react"
 
-const FAQ_SUGGESTIONS = [
-  "Was bietet Aegis genau an?",
-  "Wie funktioniert die Dark-Web-Überwachung?",
-  "Gibt es eine Demo?",
-  "Welche Integrationen unterstützt Aegis?",
-  "Wie sicher sind meine Daten?",
-  "Wie kann ich starten?",
+const faqs = [
+  "Was ist Aegis?",
+  "Wie funktioniert die KI-Erkennung?",
+  "Bietet ihr 24/7 Monitoring?",
+  "Welche Integrationen gibt es?",
+  "Wie starte ich einen Proof of Concept?",
+  "Wie funktioniert die Incident Response?",
 ]
 
 export default function ChatWidget() {
   const [open, setOpen] = useState(false)
-  const [messages, setMessages] = useState([
-    { role: "assistant", content: "Hallo! Wie kann ich Ihnen bei Cybersicherheit helfen?" },
-  ])
+  const [animState, setAnimState] = useState("idle") // idle | entering | exiting
   const [input, setInput] = useState("")
-  const endRef = useRef(null)
+  const [messages, setMessages] = useState([{ role: "assistant", content: "Hallo! Wie kann ich helfen?" }])
+
+  const panelRef = useRef(null)
+  const inputRef = useRef(null)
+
+  // Smooth mount/unmount animation
+  useEffect(() => {
+    if (open) {
+      setAnimState("entering")
+      const t = setTimeout(() => setAnimState("idle"), 180)
+      return () => clearTimeout(t)
+    } else if (animState === "idle") {
+      setAnimState("exiting")
+      const t = setTimeout(() => setAnimState("idle"), 160)
+      return () => clearTimeout(t)
+    }
+  }, [open])
 
   useEffect(() => {
-    endRef.current?.scrollIntoView({ behavior: "smooth" })
-  }, [messages, open])
+    if (open) inputRef.current?.focus()
+  }, [open])
 
-  async function send(text) {
-    const userText = text.trim()
+  const sendMessage = async (text) => {
+    const userText = (text ?? input).trim()
     if (!userText) return
-
     setMessages((m) => [...m, { role: "user", content: userText }])
     setInput("")
-
     try {
       const res = await fetch("/api/chat", {
         method: "POST",
@@ -38,119 +50,115 @@ export default function ChatWidget() {
         body: JSON.stringify({ message: userText }),
       })
       const data = await res.json()
-      setMessages((m) => [...m, { role: "assistant", content: data.reply ?? "OK." }])
-    } catch (err) {
+      setMessages((m) => [...m, { role: "assistant", content: data.reply || "Alles klar!" }])
+    } catch {
       setMessages((m) => [
         ...m,
-        { role: "assistant", content: "Entschuldigung, es gab ein Problem. Bitte versuchen Sie es erneut." },
+        { role: "assistant", content: "Entschuldigung, es gab ein Problem. Bitte erneut versuchen." },
       ])
     }
   }
 
-  async function onSubmit(e) {
-    e.preventDefault()
-    await send(input)
-  }
-
-  function onFaqClick(q) {
-    void send(q)
-  }
-
   return (
     <>
-      {!open && (
-        <button
-          onClick={() => setOpen(true)}
-          className="fixed bottom-5 right-5 z-50 inline-flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-r from-purple-600 to-fuchsia-600 text-white shadow-lg shadow-fuchsia-900/30 ring-1 ring-white/10 hover:opacity-90 transition"
-          aria-label="Chat öffnen"
-          type="button"
-        >
-          <MessageCircle className="h-6 w-6" />
-        </button>
-      )}
+      {/* Trigger button */}
+      <button
+        aria-label="Chat öffnen"
+        onClick={() => setOpen((v) => !v)}
+        className="fixed bottom-4 right-4 z-40 flex h-14 w-14 items-center justify-center rounded-full border border-purple-500/30 bg-slate-900/80 text-white shadow-2xl backdrop-blur transition hover:bg-slate-900/95"
+      >
+        {open ? <X className="h-6 w-6" /> : <MessageSquare className="h-6 w-6" />}
+      </button>
 
-      {open && (
+      {/* Panel */}
+      <div
+        ref={panelRef}
+        role="dialog"
+        aria-label="Aegis Chat"
+        className={`fixed right-4 z-40 w-[92vw] max-w-sm rounded-2xl border border-white/15 bg-slate-950/80 text-white shadow-2xl backdrop-blur ${
+          open || animState === "exiting" ? "pointer-events-auto" : "pointer-events-none"
+        } ${open ? "bottom-24" : animState === "exiting" ? "bottom-24" : "bottom-24"}`}
+        style={{}}
+      >
         <div
-          className="fixed bottom-5 right-5 z-50 w-[90vw] max-w-sm overflow-hidden rounded-xl border border-purple-500/30 bg-slate-950/80 text-white shadow-2xl backdrop-blur transition-all duration-200 ease-out"
-          role="dialog"
-          aria-modal="true"
-          aria-label="Aegis Support Chat"
+          className={`glass-card ${
+            open
+              ? animState === "entering"
+                ? "chat-enter-active"
+                : ""
+              : animState === "exiting"
+                ? "chat-exit-active"
+                : "hidden"
+          }`}
         >
-          <div className="flex items-center justify-between px-4 py-3 border-b border-slate-700/50 bg-gradient-to-r from-slate-900/60 to-slate-900/20">
-            <div className="font-semibold">
-              <span className="bg-gradient-to-r from-purple-400 via-fuchsia-400 to-indigo-400 bg-clip-text text-transparent">
-                Aegis
-              </span>{" "}
-              Chat
+          {/* Header */}
+          <div className="flex items-center justify-between rounded-t-2xl border-b border-white/10 bg-gradient-to-r from-purple-600/20 to-purple-400/10 px-4 py-3">
+            <div className="flex items-center gap-2">
+              <Sparkles className="h-4 w-4 text-purple-300" />
+              <p className="text-sm font-semibold">Aegis Support</p>
             </div>
             <button
-              className="rounded-md p-1 hover:bg-slate-800/70"
-              onClick={() => setOpen(false)}
               aria-label="Chat schließen"
-              type="button"
+              onClick={() => setOpen(false)}
+              className="rounded-md border border-white/10 p-1 text-white/70 hover:bg-white/10"
             >
-              <X className="h-5 w-5 text-slate-300" />
+              <X className="h-4 w-4" />
             </button>
           </div>
 
-          {/* Häufige Fragen */}
-          <div className="px-4 pt-3">
-            <div className="text-xs uppercase tracking-wide text-slate-400 mb-2">Häufige Fragen</div>
-            <div className="flex flex-wrap gap-2">
-              {FAQ_SUGGESTIONS.map((q, i) => (
-                <button
-                  key={i}
-                  type="button"
-                  onClick={() => onFaqClick(q)}
-                  className="rounded-full border border-purple-500/30 bg-slate-900/60 px-3 py-1 text-xs text-slate-200 hover:border-purple-400/50 hover:bg-slate-900/80 transition"
-                  aria-label={`Häufige Frage: ${q}`}
-                >
-                  {q}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Nachrichten */}
-          <div className="h-64 overflow-y-auto px-4 py-3 space-y-3" aria-live="polite" aria-atomic="false">
-            {messages.map((m, i) => (
-              <div key={i} className={m.role === "user" ? "flex justify-end" : "flex justify-start"}>
-                <div
-                  className={
-                    "max-w-[85%] rounded-lg px-3 py-2 text-sm " +
-                    (m.role === "user"
-                      ? "bg-gradient-to-r from-purple-600/80 to-fuchsia-600/80 text-white"
-                      : "bg-slate-800/70 border border-slate-700/60 text-slate-100")
-                  }
-                >
-                  {m.content}
-                </div>
-              </div>
+          {/* FAQs quick replies */}
+          <div className="flex flex-wrap gap-2 px-4 pb-3 pt-3">
+            {faqs.map((q) => (
+              <button
+                key={q}
+                onClick={() => sendMessage(q)}
+                className="rounded-full border border-purple-500/30 bg-white/5 px-3 py-1 text-xs text-white/80 hover:bg-white/10"
+              >
+                {q}
+              </button>
             ))}
-            <div ref={endRef} />
           </div>
 
-          {/* Eingabe */}
-          <form onSubmit={onSubmit} className="flex items-center gap-2 border-t border-slate-700/50 p-3">
+          {/* Messages */}
+          <div className="max-h-72 overflow-y-auto px-4 py-2">
+            <ul className="space-y-2 text-sm">
+              {messages.map((m, i) => (
+                <li key={i} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}>
+                  <div
+                    className={`max-w-[80%] rounded-lg px-3 py-2 ${
+                      m.role === "user"
+                        ? "bg-purple-600/30 border border-purple-500/30"
+                        : "bg-white/5 border border-white/10"
+                    }`}
+                  >
+                    {m.content}
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Input */}
+          <form
+            className="flex items-center gap-2 border-t border-white/10 px-3 py-3"
+            onSubmit={(e) => {
+              e.preventDefault()
+              sendMessage()
+            }}
+          >
             <input
-              type="text"
-              className="flex-1 rounded-md bg-slate-900/70 px-3 py-2 text-sm text-white placeholder-slate-400 outline-none ring-1 ring-inset ring-slate-700/60 focus:ring-purple-500/60"
-              placeholder="Frage stellen..."
+              ref={inputRef}
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              aria-label="Nachricht eingeben"
+              placeholder="Nachricht eingeben..."
+              className="flex-1 rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white outline-none placeholder:text-white/40 focus:border-purple-500/50"
             />
-            <button
-              type="submit"
-              className="inline-flex items-center gap-1 rounded-md bg-purple-600 px-3 py-2 text-sm font-medium text-white hover:bg-purple-500 transition"
-              aria-label="Nachricht senden"
-            >
-              <Send className="h-4 w-4" />
-              <span className="sr-only">Senden</span>
+            <button type="submit" aria-label="Senden" className="btn-primary h-10 w-10 rounded-lg p-0">
+              <Send className="mx-auto h-4 w-4" />
             </button>
           </form>
         </div>
-      )}
+      </div>
     </>
   )
 }
