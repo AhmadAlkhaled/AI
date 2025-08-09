@@ -1,4 +1,9 @@
-@import "tailwindcss";
+/* Tailwind layers (required) */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Optional plugin or extra CSS imports */
 @import "tw-animate-css";
 
 :root {
