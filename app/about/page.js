@@ -24,7 +24,6 @@ import {
   Server,
   Key,
   AlertTriangle,
-  Rocket,
 } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
@@ -690,47 +689,6 @@ export default function AboutPage() {
               </div>
             </CardContent>
           </Card>
-        </section>
-
-        {/* About Section Updates */}
-        <section className="container mx-auto px-4 py-12">
-          <div className="grid gap-6 md:grid-cols-2">
-            <div className="glass-card p-6">
-              <div className="flex items-center gap-2">
-                <Shield className="h-5 w-5 text-purple-300" />
-                <h2 className="text-lg font-semibold text-white/90">Kompetenzen</h2>
-              </div>
-              <ul className="mt-4 list-disc space-y-2 pl-6 text-white/75">
-                <li>KI-gestützte Erkennung und Anomalie-Analyse</li>
-                <li>SOAR-Workflows und automatisierte Response</li>
-                <li>Cloud-, E-Mail- und Endpunktsicherheit</li>
-                <li>Zero-Trust-Architektur und Least Privilege</li>
-              </ul>
-            </div>
-            <div className="glass-card overflow-hidden">
-              <Image
-                src="/placeholder.svg?height=420&width=700"
-                alt="Aegis Team"
-                width={700}
-                height={420}
-                className="h-auto w-full"
-              />
-            </div>
-          </div>
-
-          <div className="mt-8 grid gap-6 md:grid-cols-3">
-            {[
-              { icon: Cloud, title: "Integrationen", text: "SIEM/SOAR, Cloud Provider, EDR/XDR, Ticketing." },
-              { icon: Zap, title: "Schnelligkeit", text: "PoC in Wochen, MTTD↓, MTTR↓, Audit-Readiness." },
-              { icon: Rocket, title: "Skalierung", text: "Reibungslos mit Team- und Compliance-Anforderungen." },
-            ].map((i) => (
-              <div key={i.title} className="glass-card p-5">
-                <i.icon className="h-5 w-5 text-purple-300" />
-                <h3 className="mt-3 font-semibold text-white/90">{i.title}</h3>
-                <p className="mt-2 text-sm text-white/70">{i.text}</p>
-              </div>
-            ))}
-          </div>
         </section>
       </div>
     </div>

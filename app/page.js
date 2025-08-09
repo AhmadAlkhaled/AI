@@ -16,15 +16,13 @@ import {
   CheckCircle2,
   ArrowUpRight,
   ArrowDownRight,
+  BellRing,
   LineChart,
-  Database,
-  Wifi,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel"
-import { Progress } from "@/components/ui/progress"
 
 export default function HomePage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -154,78 +152,6 @@ export default function HomePage() {
       rating: 5,
       avatar: "/placeholder.svg?height=64&width=64",
     },
-    {
-      name: "M. Schulz",
-      role: "CISO, FinServe AG",
-      text: "Aegis hat unsere Mean-Time-to-Detect um 68% gesenkt.",
-      avatar: "/placeholder.svg?height=80&width=80",
-    },
-    {
-      name: "L. Weber",
-      role: "IT-Leiter, AutoTech",
-      text: "Nahtlose Integration ins bestehende SIEM. Top!",
-      avatar: "/placeholder.svg?height=80&width=80",
-    },
-    {
-      name: "T. Hartmann",
-      role: "SOC Lead, RetailCo",
-      text: "Alarme sind präziser, weniger False Positives.",
-      avatar: "/placeholder.svg?height=80&width=80",
-    },
-    {
-      name: "A. Hoffmann",
-      role: "CTO, HealthSoft",
-      text: "Transparente Reports überzeugen auch Auditoren.",
-      avatar: "/placeholder.svg?height=80&width=80",
-    },
-    {
-      name: "S. Kaiser",
-      role: "CIO, LogiChain",
-      text: "24/7 Monitoring und klare Eskalationspfade.",
-      avatar: "/placeholder.svg?height=80&width=80",
-    },
-    {
-      name: "R. Meier",
-      role: "Founder, SaaSCloud",
-      text: "PoC in 2 Wochen – klar messbare Ergebnisse.",
-      avatar: "/placeholder.svg?height=80&width=80",
-    },
-    {
-      name: "J. Krüger",
-      role: "Head of IT, IndustrieX",
-      text: "Zero-Trust-Ansatz gut unterstützt.",
-      avatar: "/placeholder.svg?height=80&width=80",
-    },
-    {
-      name: "V. Klein",
-      role: "Security Arch., BuildCo",
-      text: "Sehr flexible Richtlinien-Engine.",
-      avatar: "/placeholder.svg?height=80&width=80",
-    },
-    {
-      name: "F. Wagner",
-      role: "Ops Lead, MediaHub",
-      text: "Dashboards sind wirklich hilfreich.",
-      avatar: "/placeholder.svg?height=80&width=80",
-    },
-    {
-      name: "K. Neumann",
-      role: "CISO, BankPlus",
-      text: "Audits laufen schneller mit Aegis.",
-      avatar: "/placeholder.svg?height=80&width=80",
-    },
-    {
-      name: "N. Brandt",
-      role: "SecOps, PharmaOne",
-      text: "Automatisierte Response spart viel Zeit.",
-      avatar: "/placeholder.svg?height=80&width=80",
-    },
-    {
-      name: "P. Vogel",
-      role: "VP Eng., AdServe",
-      text: "Empfehlung für wachsende SaaS-Teams.",
-      avatar: "/placeholder.svg?height=80&width=80",
-    },
   ]
 
   const stats = [
@@ -235,6 +161,7 @@ export default function HomePage() {
     { number: "24/7", label: "Support" },
   ]
 
+  // Neue Inhalte
   const useCases = [
     {
       key: "web",
@@ -551,45 +478,40 @@ export default function HomePage() {
             </div>
 
             {/* System Health */}
-            <Card className="glass-card card-hover border-primary/20">
+            <Card className="glass-card card-hover border-purple-500/20">
               <CardHeader>
-                <CardTitle className="text-white flex items-center">
-                  <Activity className="w-5 h-5 mr-2 text-cyan-400" />
-                  System Status
-                </CardTitle>
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 flex items-center justify-center">
+                    <Activity className="w-5 h-5 text-white" />
+                  </div>
+                  <div>
+                    <CardTitle className="text-white">Systemzustand</CardTitle>
+                    <CardDescription className="text-gray-400">Letzte 24 Stunden</CardDescription>
+                  </div>
+                </div>
               </CardHeader>
               <CardContent className="space-y-4">
-                {[
-                  { name: "Web Server", status: "online", load: 34, icon: Server },
-                  { name: "Database", status: "online", load: 67, icon: Database },
-                  { name: "API Gateway", status: "warning", load: 89, icon: Wifi },
-                  { name: "Load Balancer", status: "online", load: 23, icon: Activity },
-                ].map((service, index) => (
-                  <div key={index} className="flex items-center justify-between p-3 rounded-lg bg-slate-800/30">
-                    <div className="flex items-center space-x-3">
-                      <service.icon className="w-5 h-5 text-blue-400" />
-                      <div>
-                        <p className="text-white font-medium">{service.name}</p>
-                        <div className="flex items-center space-x-2">
-                          <div
-                            className={`w-2 h-2 rounded-full ${
-                              service.status === "online" ? "bg-green-500 animate-pulse" : "bg-yellow-500 animate-pulse"
-                            }`}
-                          ></div>
-                          <span
-                            className={`text-sm ${service.status === "online" ? "text-green-400" : "text-yellow-400"}`}
-                          >
-                            {service.status === "online" ? "Online" : "Warnung"}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="text-right">
-                      <p className="text-white font-medium">{service.load}% Load</p>
-                      <Progress value={service.load} className="w-20" />
-                    </div>
+                <div className="flex items-center justify-between border border-purple-500/20 rounded-lg p-3 bg-slate-900/50">
+                  <div className="flex items-center gap-2 text-gray-300">
+                    <Server className="w-4 h-4 text-blue-400" />
+                    API Uptime
                   </div>
-                ))}
+                  <div className="text-purple-300">99.99%</div>
+                </div>
+                <div className="flex items-center justify-between border border-purple-500/20 rounded-lg p-3 bg-slate-900/50">
+                  <div className="flex items-center gap-2 text-gray-300">
+                    <Zap className="w-4 h-4 text-yellow-400" />
+                    Alert Throughput
+                  </div>
+                  <div className="text-purple-300">4.2k/min</div>
+                </div>
+                <div className="flex items-center justify-between border border-purple-500/20 rounded-lg p-3 bg-slate-900/50">
+                  <div className="flex items-center gap-2 text-gray-300">
+                    <BellRing className="w-4 h-4 text-purple-400" />
+                    Smart Alerts
+                  </div>
+                  <div className="text-purple-300">Priorisiert</div>
+                </div>
               </CardContent>
             </Card>
           </div>

@@ -1,11 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
-/* Tailwind base */
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 :root {
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
@@ -42,9 +37,13 @@
   --sidebar-ring: oklch(0.708 0 0);
 
   /* Aegis Custom Colors */
-  --aegis-primary: #9333ea; /* purple */
-  --aegis-primary-600: #7e22ce;
-  --aegis-bg: #0b1220; /* matches slate-950-ish */
+  --aegis-primary: 262 83% 58%;
+  --aegis-secondary: 221 83% 53%;
+  --aegis-accent: 262 83% 58%;
+  --aegis-success: 142 76% 36%;
+  --aegis-warning: 38 92% 50%;
+  --aegis-danger: 0 84% 60%;
+  --aegis-info: 199 89% 48%;
 }
 
 .dark {
@@ -132,14 +131,15 @@
 
 @layer components {
   .glass-card {
-    @apply bg-white/5 border border-white/10 rounded-xl relative overflow-hidden;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    @apply bg-slate-900/40 border border-white/10 rounded-xl relative overflow-hidden;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
   }
 
-  .glass-hover:hover {
-    @apply border-white/20 bg-white/10;
+  .glass-card::before {
+    content: "";
+    @apply absolute inset-0 bg-gradient-to-br from-white/5 to-transparent pointer-events-none;
   }
 
   .card-hover {
@@ -152,13 +152,14 @@
   }
 
   .btn-primary {
-    @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2 font-medium transition-colors;
-    @apply text-white;
-    background: linear-gradient(135deg, var(--aegis-primary), var(--aegis-primary-600));
+    @apply bg-gradient-to-r from-purple-600 to-blue-600 text-white border-0 rounded-lg px-6 py-3 font-medium;
+    @apply hover:from-purple-700 hover:to-blue-700 transform hover:scale-105 active:scale-95;
+    @apply transition-all duration-300 ease-out;
+    box-shadow: 0 4px 20px rgba(147, 51, 234, 0.4);
   }
 
   .btn-primary:hover {
-    filter: brightness(1.05);
+    box-shadow: 0 8px 30px rgba(147, 51, 234, 0.6);
   }
 
   .btn-secondary {
@@ -236,54 +237,16 @@
   }
 
   .animate-glow {
-    animation: aegisGlow 2.8s ease-in-out infinite;
+    animation: glow 2s ease-in-out infinite alternate;
   }
 
-  @keyframes aegisGlow {
-    0% {
-      box-shadow: 0 0 0px rgba(147, 51, 234, 0.3);
+  @keyframes glow {
+    from {
+      text-shadow: 0 0 5px rgb(147 51 234), 0 0 10px rgb(147 51 234), 0 0 15px rgb(147 51 234);
     }
-    50% {
-      box-shadow: 0 0 24px rgba(147, 51, 234, 0.6);
+    to {
+      text-shadow: 0 0 10px rgb(59 130 246), 0 0 20px rgb(59 130 246), 0 0 30px rgb(59 130 246);
     }
-    100% {
-      box-shadow: 0 0 0px rgba(147, 51, 234, 0.3);
-    }
-  }
-
-  .neon-text {
-    background-image: linear-gradient(90deg, #c084fc 0%, #60a5fa 50%, #a78bfa 100%);
-    background-clip: text;
-    -webkit-background-clip: text;
-    color: transparent;
-  }
-
-  .section {
-    @apply py-12 md:py-16;
-  }
-
-  .kbd {
-    @apply rounded-md border border-white/20 bg-white/10 px-2 py-0.5 text-xs;
-  }
-
-  /* Chat panel transition helpers */
-  .chat-enter {
-    opacity: 0;
-    transform: translateY(8px) scale(0.98);
-  }
-  .chat-enter-active {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-    transition: opacity 160ms ease, transform 180ms ease;
-  }
-  .chat-exit {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-  .chat-exit-active {
-    opacity: 0;
-    transform: translateY(8px) scale(0.98);
-    transition: opacity 140ms ease, transform 160ms ease;
   }
 }
 
@@ -332,12 +295,4 @@
     animation: none;
     transition: none;
   }
-}
-
-html,
-body {
-  height: 100%;
-  background: var(--aegis-bg);
-  color: white;
-  scroll-behavior: smooth;
 }
